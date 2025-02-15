@@ -6,7 +6,7 @@
 /*   By: malsheri <malsheri@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 09:16:42 by malsheri          #+#    #+#             */
-/*   Updated: 2025/02/13 09:24:30 by malsheri         ###   ########.fr       */
+/*   Updated: 2025/02/15 09:17:41 by malsheri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,29 @@ int check_philo_args(char   **av)
             return (0);
     }
     return (1);
+}
+
+const   char    *valid_input(const  char    *str)
+{
+    int len;
+    const   char    *num;
+
+    len = 0;
+    while(is_space(*str))
+        ++str;
+    if (*str == '+')
+        ++str;
+    else if (*str == '-')
+        erroring("INPUT ONLY POSITIVE NUMBERS!");
+    while (!is_digit(*str))
+        erroring("INPUT ONLY DIGITS!");
+    num = str;
+    while(is_digit(*str))
+    {
+        str++;
+        len++;
+    }
+    if (len > 10)
+        erroring("INT_MAX IS THE LIMIT!");
+    return (num);
 }

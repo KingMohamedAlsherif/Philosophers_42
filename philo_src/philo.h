@@ -34,9 +34,9 @@ typedef struct s_sync
 {
 	int				*dead;
     int             *eating;
-	pthread_mutex_t	*print_lock;
-	pthread_mutex_t	*death_lock;
-	pthread_mutex_t	*meal_lock;
+	t_mtx			*print_lock;
+	t_mtx			*dead_st;
+	t_mtx			*meal_lock;
 }				t_sync;
 
 typedef struct s_philo
@@ -58,9 +58,9 @@ typedef struct s_data
 	int				meal_num;             // Number of meals required before stopping
 	int				is_dead;              // Flag to indicate if any philosopher has died
 	t_philo 	    *philos;              // Array of philosophers
-	pthread_mutex_t	print;                // Mutex for printing messages
-	pthread_mutex_t	dead_status;          // Mutex for checking dead status
-	pthread_mutex_t	meal_count_lock;      // Mutex for updating meal counts
+	t_mtx			print;                // Mutex for printing messages
+	t_mtx			dead_status;          // Mutex for checking dead status
+	t_mtx			meal_count_lock;      // Mutex for updating meal counts
 	pthread_t		monitor;               // Thread to monitor philosophers' status
 }					t_data;
 
@@ -70,7 +70,16 @@ void    erroring(char *str);
 int     check_max_min(char *str);
 int     check_philo_args(int ac, char **av);
 int     init_threads(t_data *data);
-void    monitor_thread(void *a);
+void    monitor_thread(void *a);	
+int     check_dead_st(t_philo   *philo);
+const   char    *valid_input(const  char    *str);
+void    philo_thread(void   *a);
+void    printing(int philo_id, char *str, t_philo *philo);
+size_t  time_stamp(size_t sim_start);
+int wait_time(size_t time, t_philo *philo);
+size_t  get_time(void);
+
+
 
 
 #endif
