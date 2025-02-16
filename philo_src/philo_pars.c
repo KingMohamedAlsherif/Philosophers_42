@@ -6,7 +6,7 @@
 /*   By: malsheri <malsheri@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 09:16:42 by malsheri          #+#    #+#             */
-/*   Updated: 2025/02/15 09:17:41 by malsheri         ###   ########.fr       */
+/*   Updated: 2025/02/15 10:37:51 by malsheri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,13 @@ int check_philo_args(char   **av)
     return (1);
 }
 
+static int is_space(char c)
+{
+    if (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r')
+        return (1);
+    return (0);
+}
+
 const   char    *valid_input(const  char    *str)
 {
     int len;
@@ -76,4 +83,10 @@ const   char    *valid_input(const  char    *str)
     if (len > 10)
         erroring("INT_MAX IS THE LIMIT!");
     return (num);
+}
+
+void    erroring(char *str)
+{
+    write(2, str, strlen(str));
+    exit(1);
 }

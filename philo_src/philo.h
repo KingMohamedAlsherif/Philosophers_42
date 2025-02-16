@@ -34,7 +34,6 @@ typedef struct s_sync
 {
 	int				*dead;
     int             *eating;
-	t_mtx			*print_lock;
 	t_mtx			*dead_st;
 	t_mtx			*meal_lock;
 }				t_sync;
@@ -64,22 +63,41 @@ typedef struct s_data
 	pthread_t		monitor;               // Thread to monitor philosophers' status
 }					t_data;
 
-
-long    ft_atol(const   char    *num);
-void    erroring(char *str);
-int     check_max_min(char *str);
-int     check_philo_args(int ac, char **av);
-int     init_threads(t_data *data);
-void    monitor_thread(void *a);	
-int     check_dead_st(t_philo   *philo);
-const   char    *valid_input(const  char    *str);
-void    philo_thread(void   *a);
-void    printing(int philo_id, char *str, t_philo *philo);
-size_t  time_stamp(size_t sim_start);
-int wait_time(size_t time, t_philo *philo);
+// The UTIL functions
 size_t  get_time(void);
+long    ft_atol(const   char    *num);
+int    printing(int philo_id, char *str, t_philo *philo);
+size_t  time_stamp(size_t sim_start);
+int 	wait_time(size_t time, t_philo *philo);
+
+// The INIT functions
+int    	init_th(t_philo *philos, t_data *data);
+int 	init_data(t_data *data, char    **av, t_philo   *philos, int    ac);
+int     init_forks(int  *forks, t_mtx  *forks_mtx, int    philo_num);
+void    init_philos(t_data  *data, t_philo  *philos, int    *forks, t_mtx   *forks_mtx);
+
+// Monitor functions
+void    *monitor_thread(void *a);
+int check_die(t_philo   *philos, t_data *data);
+int check_eat_time(t_philo *philos, t_data *data);
 
 
 
+// simulation functions
+int     check_dead_st(t_philo   *philo);
+void    *philo_thread(void   *a);
+void    mtx_order_forks(t_philo *philo);
+void    eating(t_philo *philo);
+void    sleeping(t_philo *philo);
+void    thinking(t_philo *philo);
+int     check_dead_st(t_philo   *philo);
+
+// The Parsing functions
+const   char    *valid_input(const  char    *str);
+int     check_max_min(char *str);
+int     check_philo_args(char **av);
+void    erroring(char *str);
+void    des_mtx(t_data *data, t_mtx *forks, char *str);
+int  is_digit(char c);
 
 #endif

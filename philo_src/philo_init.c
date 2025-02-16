@@ -6,32 +6,33 @@
 /*   By: malsheri <malsheri@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 09:50:05 by malsheri          #+#    #+#             */
-/*   Updated: 2025/02/14 10:54:11 by malsheri         ###   ########.fr       */
+/*   Updated: 2025/02/15 10:32:47 by malsheri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void     init_th(t_philo *philos, t_data *data)
+int     init_th(t_philo *philos, t_data *data)
 {
         int i;
         
         if (pthread_create(&data->monitor, NULL, &monitor_thread, data) != 0)
-            erroring("Error creating monitor thread");
+            return (0);
         i = -1;
         while (++i, i < data->philo_num)
         {
             if (pthread_create(&philos[i].thread, NULL, &philo_thread, &philos[i]) != 0)
-                erroring("Error creating philosopher thread");
+                return (0);
         }
         if (pthread_join(data->monitor, NULL) != 0)
-            erroring("Error joining monitor thread");
+            return (0);
         i = -1;
         while (++i, i < data->philo_num)
         {
             if (pthread_join(philos[i].thread, NULL) != 0)
-                erroring("Error joining philosopher thread");
+                return (0);
         }
+        return (1);
 }
 
 int init_data(t_data *data, char    **av, t_philo   *philos, int    ac)
@@ -88,7 +89,7 @@ void    init_philos(t_data  *data, t_philo  *philos, int    *forks, t_mtx   *for
         philos[i].times.last_meal = get_time();
         philos[i].times.sim_start = get_time();
         philos[i].print = &data->print;
-        philos[i].sync.dead = &data->dead_status;
+        philos[i].sync.dead_st = &data->dead_status;
         philos[i].sync.meal_lock = &data->meal_count_lock;
         philos[i].forks.right = &forks[i];
         if ((data->philo_num - 1) == i)
