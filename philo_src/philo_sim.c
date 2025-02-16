@@ -6,7 +6,7 @@
 /*   By: malsheri <malsheri@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 05:53:39 by malsheri          #+#    #+#             */
-/*   Updated: 2025/02/16 07:33:23 by malsheri         ###   ########.fr       */
+/*   Updated: 2025/02/16 07:56:11 by malsheri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,28 +51,15 @@ void    mtx_order_forks(t_philo *philo)
 
 void    eating(t_philo *philo)
 {
-    if (!philo || !philo->sync.meal_lock)
-    {
-        printf("Error: philo or meal_lock is NULL\n");
-        return;
-    }
     mtx_order_forks(philo);
     pthread_mutex_lock(philo->sync.meal_lock);
     philo->times.last_meal = get_time();
     philo->eating = 1;
     philo->meals_eaten++;
-    pthread_mutex_unlock(philo->sync.meal_lock);
-    if (!philo->id)
-        printf("Warning: philo->id is 0 (might be uninitialized)\n");
-    if (printing(philo->id, "has taken a fork", philo) != 0)
-    {
-        printf("Error: printing function pointer is NULL\n");
-        return;
-    }
-
-    printing(philo->id, "has taken a fork", philo);
-    printing(philo->id, "has taken a fork", philo);
-    printing(philo->id, "is eating", philo);
+	pthread_mutex_unlock(philo->sync.meal_lock);
+	printing(philo->id, "has taken a fork", philo);
+	printing(philo->id, "has taken another fork", philo);
+	printing(philo->id, "is eating", philo);
     *(philo->forks.right) = 0;
     *(philo->forks.left) = 0;
     wait_time(philo->times.to_eat, philo);
